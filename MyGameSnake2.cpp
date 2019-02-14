@@ -1,3 +1,5 @@
+//CopyRight by Aleksandr A. Stanov
+
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
@@ -5,7 +7,7 @@
 #include <Windows.h>
 #include <string.h>
 #include "ConsoleLib.h"
-//#include <Mmsystem.h>   // Добавить winmm.lib в Project Properties -> Linker -> Command Line -> Additional Options
+//#include <Mmsystem.h>   // Г„Г®ГЎГ ГўГЁГІГј winmm.lib Гў Project Properties -> Linker -> Command Line -> Additional Options
 
 using namespace std;
 
@@ -16,8 +18,8 @@ int key = 0;
 
 struct Snake
 {
-	COORD *t; //точки 
-	int ACount; //количество яблок
+	COORD *t; //ГІГ®Г·ГЄГЁ 
+	int ACount; //ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГїГЎГ«Г®ГЄ
 };
 
 struct Game
@@ -29,9 +31,9 @@ struct Game
 	int dir;
 };
 
-enum direction { LEFT, UP, RIGHT, DOWN }; //упровление 
+enum direction { LEFT, UP, RIGHT, DOWN }; //ГіГЇГ°Г®ГўГ«ГҐГ­ГЁГҐ 
 
-enum { END, STOP, PLUS, MOVE };  //напровление, добавление ... 
+enum { END, STOP, PLUS, MOVE };  //Г­Г ГЇГ°Г®ГўГ«ГҐГ­ГЁГҐ, Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ ... 
 
 void WriteMenu()
 {
@@ -77,7 +79,7 @@ void WriteMenu()
 	ShowCursor(false);
 }
 
-char* GetName(char* st)// имя пользователя
+char* GetName(char* st)// ГЁГ¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
 {
 	SetColor(Blue, Black);
 
@@ -86,35 +88,35 @@ char* GetName(char* st)// имя пользователя
 	return st;
 }
 
-void PrintApple(Game &g) // рандом для яблок
+void PrintApple(Game &g) // Г°Г Г­Г¤Г®Г¬ Г¤Г«Гї ГїГЎГ«Г®ГЄ
 {
 	int i, x, y;
 	int n = g.snakes.ACount;
 	do
 	{
 		x = rand() % 77 + 3;
-		y = rand() % 25 + 3; //кординаты яблока
+		y = rand() % 25 + 3; //ГЄГ®Г°Г¤ГЁГ­Г ГІГ» ГїГЎГ«Г®ГЄГ 
 		for (i = 0; i < n; i++)
 		{
-			if (x == g.snakes.t[i].X && y == g.snakes.t[i].Y) // проверка чтоб яблоко не попало на змею
+			if (x == g.snakes.t[i].X && y == g.snakes.t[i].Y) // ГЇГ°Г®ГўГҐГ°ГЄГ  Г·ГІГ®ГЎ ГїГЎГ«Г®ГЄГ® Г­ГҐ ГЇГ®ГЇГ Г«Г® Г­Г  Г§Г¬ГҐГѕ
 				break;
 		}
 
 	}while (i < n);
 	g.apples.X = x;
-	g.apples.Y = y; //запоминаем позицию яблока
+	g.apples.Y = y; //Г§Г ГЇГ®Г¬ГЁГ­Г ГҐГ¬ ГЇГ®Г§ГЁГ¶ГЁГѕ ГїГЎГ«Г®ГЄГ 
 
-	SetConsoleCursorPosition(hStdOut, g.apples); //переносим курсор в эту позицию
+	SetConsoleCursorPosition(hStdOut, g.apples); //ГЇГҐГ°ГҐГ­Г®Г±ГЁГ¬ ГЄГіГ°Г±Г®Г° Гў ГЅГІГі ГЇГ®Г§ГЁГ¶ГЁГѕ
 
-	SetConsoleTextAttribute(hStdOut, 0x0c); //цвет яблока  
-	cout << "Q"; //рисуем яблоко
+	SetConsoleTextAttribute(hStdOut, 0x0c); //Г¶ГўГҐГІ ГїГЎГ«Г®ГЄГ   
+	cout << "Q"; //Г°ГЁГ±ГіГҐГ¬ ГїГЎГ«Г®ГЄГ®
 }
 
-void StartSnake(Game &g) //старт змейки и ее координаыт и скорость
+void StartSnake(Game &g) //Г±ГІГ Г°ГІ Г§Г¬ГҐГ©ГЄГЁ ГЁ ГҐГҐ ГЄГ®Г®Г°Г¤ГЁГ­Г Г»ГІ ГЁ Г±ГЄГ®Г°Г®Г±ГІГј
 {
 	system("cls");
-	g.snakes.ACount = 3; //сколько точек в змейке
-	g.snakes.t = new COORD[3];//создали точки
+	g.snakes.ACount = 3; //Г±ГЄГ®Г«ГјГЄГ® ГІГ®Г·ГҐГЄ Гў Г§Г¬ГҐГ©ГЄГҐ
+	g.snakes.t = new COORD[3];//Г±Г®Г§Г¤Г Г«ГЁ ГІГ®Г·ГЄГЁ
 	for (int i = 0; i < 3; i++)
 	{
 		g.snakes.t[i].X = 20 + i;
@@ -123,12 +125,12 @@ void StartSnake(Game &g) //старт змейки и ее координаыт и скорость
 
 	g.dx = 1;
 	g.dy = 0;
-	g.pause = 100;//скорость передвижение змеи
+	g.pause = 100;//Г±ГЄГ®Г°Г®Г±ГІГј ГЇГҐГ°ГҐГ¤ГўГЁГ¦ГҐГ­ГЁГҐ Г§Г¬ГҐГЁ
 
-	PrintApple(g);//рисуем яблоко
+	PrintApple(g);//Г°ГЁГ±ГіГҐГ¬ ГїГЎГ«Г®ГЄГ®
 }
 
-void TaskAndWishes()//условие
+void TaskAndWishes()//ГіГ±Г«Г®ГўГЁГҐ
 {
 	SetColor(Yellow, Black);
 	GotoXY(20, 12); cout << "           *** WELL, LET'S START THE GAME ***" << endl;
@@ -136,7 +138,7 @@ void TaskAndWishes()//условие
 	GotoXY(20, 17); cout << "                        GOOD LUCK " << endl;
 }
 
-void SnakeConcol()//рисуем заставку
+void SnakeConcol()//Г°ГЁГ±ГіГҐГ¬ Г§Г Г±ГІГ ГўГЄГі
 {
 	SetColor(Blue, Black);
 	ShowCursor(false);
@@ -162,7 +164,7 @@ void SnakeConcol()//рисуем заставку
 	GotoXY(30, 19); cout << "                *** PRESENTS ***                " << endl;
 }
 
-void StartGame()//Рисуем карту
+void StartGame()//ГђГЁГ±ГіГҐГ¬ ГЄГ Г°ГІГі
 {
 	SetColor(Red, Black);
 	ShowCursor(false);
@@ -180,7 +182,7 @@ void StartGame()//Рисуем карту
 	GotoXY(84, 28); cout << "Press -> ....(Back to menu)" << endl;
 	{
 		SetColor(LightBlue, Black);
-		GotoXY(2, 1); //рисуем верхнюю горизонтальную линию-стенку
+		GotoXY(2, 1); //Г°ГЁГ±ГіГҐГ¬ ГўГҐГ°ГµГ­ГѕГѕ ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­ГіГѕ Г«ГЁГ­ГЁГѕ-Г±ГІГҐГ­ГЄГі
 
 		int m = 0;
 		for (m = 0; m < 80; m++)
@@ -188,7 +190,7 @@ void StartGame()//Рисуем карту
 			cout << "_";
 		}
 		{
-			GotoXY(2, 29); //рисуем нижнюю горизонтальную линию-стенку
+			GotoXY(2, 29); //Г°ГЁГ±ГіГҐГ¬ Г­ГЁГ¦Г­ГѕГѕ ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­ГіГѕ Г«ГЁГ­ГЁГѕ-Г±ГІГҐГ­ГЄГі
 			int m = 0;
 			for (m = 0; m < 80; m++)
 			{
@@ -196,7 +198,7 @@ void StartGame()//Рисуем карту
 			}
 		}
 	}
-	//рисуем левую вертикальную линию-стенку
+	//Г°ГЁГ±ГіГҐГ¬ Г«ГҐГўГіГѕ ГўГҐГ°ГІГЁГЄГ Г«ГјГ­ГіГѕ Г«ГЁГ­ГЁГѕ-Г±ГІГҐГ­ГЄГі
 	{
 		GotoXY(2, 2); cout << "|" << endl;
 		GotoXY(2, 3); cout << "|" << endl;
@@ -230,7 +232,7 @@ void StartGame()//Рисуем карту
 	{
 		GotoXY(81, 2); cout << "|" << endl;
 		GotoXY(81, 3); cout << "|" << endl;
-		GotoXY(81, 4); cout << "|" << endl;//рисуем правую вертикальную линию-стенку
+		GotoXY(81, 4); cout << "|" << endl;//Г°ГЁГ±ГіГҐГ¬ ГЇГ°Г ГўГіГѕ ГўГҐГ°ГІГЁГЄГ Г«ГјГ­ГіГѕ Г«ГЁГ­ГЁГѕ-Г±ГІГҐГ­ГЄГі
 		GotoXY(81, 5); cout << "|" << endl;
 		GotoXY(81, 6); cout << "|" << endl;
 		GotoXY(81, 7); cout << "|" << endl;
@@ -267,16 +269,16 @@ void StartGame()//Рисуем карту
 int PrintMove(Game &g)
 {
 	int &n = g.snakes.ACount;
-	COORD head = g.snakes.t[n - 1]; //голова
-	COORD tail = g.snakes.t[0]; //хвост
+	COORD head = g.snakes.t[n - 1]; //ГЈГ®Г«Г®ГўГ 
+	COORD tail = g.snakes.t[0]; //ГµГўГ®Г±ГІ
 	COORD next;
 
 	next.X = head.X + g.dx;
-	next.Y = head.Y + g.dy; //проверка следующей точки по направлению
+	next.Y = head.Y + g.dy; //ГЇГ°Г®ГўГҐГ°ГЄГ  Г±Г«ГҐГ¤ГіГѕГ№ГҐГ© ГІГ®Г·ГЄГЁ ГЇГ® Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГѕ
 
 	if (WOLL == true)
 	{
-		if (next.X < 3 || next.Y < 3 || next.X > 80 || next.Y > 28)//не уперлась ли в стену
+		if (next.X < 3 || next.Y < 3 || next.X > 80 || next.Y > 28)//Г­ГҐ ГіГЇГҐГ°Г«Г Г±Гј Г«ГЁ Гў Г±ГІГҐГ­Гі
 			return STOP;
 	}
 
@@ -286,7 +288,7 @@ int PrintMove(Game &g)
 			next.X = 80;
 		else if (next.X >= 81)
 			next.X = 3;
-		else if (next.Y <= 1) // если уперлись в стену переход на другую сторону
+		else if (next.Y <= 1) // ГҐГ±Г«ГЁ ГіГЇГҐГ°Г«ГЁГ±Гј Гў Г±ГІГҐГ­Гі ГЇГҐГ°ГҐГµГ®Г¤ Г­Г  Г¤Г°ГіГЈГіГѕ Г±ГІГ®Г°Г®Г­Гі
 			next.Y = 28;
 		else if (next.Y >= 29)
 			next.Y = 2;
@@ -295,22 +297,22 @@ int PrintMove(Game &g)
 	if (n > 4)
 	{
 		for (int i = 0; i < n; i++)
-			if (next.X == g.snakes.t[i].X && next.Y == g.snakes.t[i].Y) //не наехали ли на себя
+			if (next.X == g.snakes.t[i].X && next.Y == g.snakes.t[i].Y) //Г­ГҐ Г­Г ГҐГµГ Г«ГЁ Г«ГЁ Г­Г  Г±ГҐГЎГї
 				return END;
 	}
 
 	if (next.X == g.apples.X && next.Y == g.apples.Y)
 	{
-		COORD *tmp = new COORD[++n]; //новый масив больший на 1
+		COORD *tmp = new COORD[++n]; //Г­Г®ГўГ»Г© Г¬Г Г±ГЁГў ГЎГ®Г«ГјГёГЁГ© Г­Г  1
 		for (int i = 0; i < n; i++)
-			tmp[i] = g.snakes.t[i]; //перекопируем
-		tmp[n - 1] = next; //добавляем одну
+			tmp[i] = g.snakes.t[i]; //ГЇГҐГ°ГҐГЄГ®ГЇГЁГ°ГіГҐГ¬
+		tmp[n - 1] = next; //Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Г®Г¤Г­Гі
 		delete[] g.snakes.t;
 		g.snakes.t = tmp;
 
 		SetConsoleCursorPosition(hStdOut, head);
 
-		SetConsoleTextAttribute(hStdOut, 0x0a); //закрашываем яблоко которое съели
+		SetConsoleTextAttribute(hStdOut, 0x0a); //Г§Г ГЄГ°Г ГёГ»ГўГ ГҐГ¬ ГїГЎГ«Г®ГЄГ® ГЄГ®ГІГ®Г°Г®ГҐ Г±ГєГҐГ«ГЁ
 		cout << "O";
 
 		SetConsoleCursorPosition(hStdOut, next);
@@ -326,22 +328,22 @@ int PrintMove(Game &g)
 		g.snakes.t[i] = g.snakes.t[i + 1];
 	g.snakes.t[n - 1] = next;
 
-	SetConsoleCursorPosition(hStdOut, tail);//закрашиваем хвост
+	SetConsoleCursorPosition(hStdOut, tail);//Г§Г ГЄГ°Г ГёГЁГўГ ГҐГ¬ ГµГўГ®Г±ГІ
 	cout << " ";
 
 	SetConsoleCursorPosition(hStdOut, head);
 
-	SetConsoleTextAttribute(hStdOut, 0x0a);//рисуем хвост змеи
+	SetConsoleTextAttribute(hStdOut, 0x0a);//Г°ГЁГ±ГіГҐГ¬ ГµГўГ®Г±ГІ Г§Г¬ГҐГЁ
 	cout << "O";
 
 	SetConsoleCursorPosition(hStdOut, next);
 
-	SetConsoleTextAttribute(hStdOut, 0x0a); //рисуем  голову
+	SetConsoleTextAttribute(hStdOut, 0x0a); //Г°ГЁГ±ГіГҐГ¬  ГЈГ®Г«Г®ГўГі
 	cout << "@";
 	return MOVE;
 }
 
-void PrintOptions() // опции игры
+void PrintOptions() // Г®ГЇГ¶ГЁГЁ ГЁГЈГ°Г»
 {
 	system("cls");
 	ShowCursor(false);
@@ -380,7 +382,7 @@ void PrintOptions() // опции игры
 }
 
 
-void PrintRulse()                                                     // правила игры
+void PrintRulse()                                                     // ГЇГ°Г ГўГЁГ«Г  ГЁГЈГ°Г»
 {
 	ShowCursor(false);
 	do
@@ -459,7 +461,7 @@ void PrintUserRecords()
 	WriteMenu();
 }
 
-void ProduceGame()                                  // производитель игры
+void ProduceGame()                                  // ГЇГ°Г®ГЁГ§ГўГ®Г¤ГЁГІГҐГ«Гј ГЁГЈГ°Г»
 {
 	ShowCursor(false);
 	do
@@ -555,7 +557,7 @@ int main()
 
 						case PLUS:
 							++count;
-							g.pause -= 3;   // овичает за скоростсь
+							g.pause -= 3;   // Г®ГўГЁГ·Г ГҐГІ Г§Г  Г±ГЄГ®Г°Г®Г±ГІГ±Гј
 
 							SetColor(Red, Black);
 
@@ -595,7 +597,7 @@ int main()
 							_getch();
 							break;
 						}
-						Sleep(g.pause); //«задержка 
+						Sleep(g.pause); //В«Г§Г Г¤ГҐГ°Г¦ГЄГ  
 					}
 
 					key = _getch();
@@ -685,7 +687,7 @@ int main()
 
 									case PLUS:
 										++count;
-										g.pause -= 3;   // овичает за скоростсь
+										g.pause -= 3;   // Г®ГўГЁГ·Г ГҐГІ Г§Г  Г±ГЄГ®Г°Г®Г±ГІГ±Гј
 
 										SetColor(Red, Black);
 										GotoXY(87, 1); cout << "******_******_*****" << endl;
@@ -723,7 +725,7 @@ int main()
 										break;
 									}
 
-									Sleep(g.pause); //«задержка 
+									Sleep(g.pause); //В«Г§Г Г¤ГҐГ°Г¦ГЄГ  
 								}
 
 								key = _getch();
@@ -802,7 +804,7 @@ int main()
 
 										case PLUS:
 											++count;
-											g.pause -= 3;   // овичает за скоростсь
+											g.pause -= 3;   // Г®ГўГЁГ·Г ГҐГІ Г§Г  Г±ГЄГ®Г°Г®Г±ГІГ±Гј
 
 											SetColor(Red, Black);
 											GotoXY(87, 1); cout << "******_******_*****" << endl;
@@ -840,7 +842,7 @@ int main()
 											break;
 										}
 
-										Sleep(g.pause); //«задержка 
+										Sleep(g.pause); //В«Г§Г Г¤ГҐГ°Г¦ГЄГ  
 									}
 
 									key = _getch();
